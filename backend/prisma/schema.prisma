@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String             @id @default(uuid(7))
+  pseudo            String             @unique @db.Char(30)
+  email             String             @unique
+  password          String
+  bracketsCreated   Bracket[]          @relation("BracketOwner")
+  brackets          Bracket[]          @relation("BracketParticipants")
+  matchParticipants MatchParticipant[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+}
+
+model Bracket {
+  id           String       @id @default(uuid(7))
+  name         String       @db.Char(100)
+  date         DateTime
+  state        BracketState @default(NOT_PUBLISHED)
+  owner        User         @relation("BracketOwner", fields: [ownerId], references: [id])
+  ownerId      String
+  participants User[]       @relation("BracketParticipants")
+  matches      Match[]
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+}
+
+model Match {
+  id                String             @id @default(uuid(7))
+  bracket           Bracket            @relation(fields: [bracketId], references: [id])
+  bracketId         String
+  // We assume that we can have tournamements with many sides playing, including many players per side
+  matchParticipants MatchParticipant[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+}
+
+model MatchParticipant {
+  id       String @id @default(uuid(7))
+  side     Int
+  score    Int?
+  match    Match  @relation(fields: [matchId], references: [id])
+  matchId  String
+  player   User   @relation(fields: [playerId], references: [id])
+  playerId String
+}
+
+enum BracketState {
+  NOT_PUBLISHED
+  OPENED // Tournament is visible and players can register
+  CLOSED // Tournament is visible but players can not longer register
+  ONGOING // Tournament is ongoing
+  FINISHED // Tournament is finished
+}
