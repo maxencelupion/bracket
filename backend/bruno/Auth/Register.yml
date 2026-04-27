@@ -1,0 +1,24 @@
+info:
+  name: Register
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://{{baseUrl}}:{{appPort}}/auth/register
+  body:
+    type: json
+    data: |-
+      {
+        "pseudo": "pseudo",
+        "email": "email@gmail.com",
+        "password": "Password1!",
+        "confirmPassword": "Password1!"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

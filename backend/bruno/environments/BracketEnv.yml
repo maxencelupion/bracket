@@ -1,0 +1,6 @@
+name: BracketEnv
+variables:
+  - name: appPort
+    value: "4000"
+  - name: baseUrl
+    value: localhost
