@@ -63,3 +63,6 @@ npm run migrate
 ```bash
 npm run dev
 ```
+
+## API Testing
+A [Bruno](https://www.usebruno.com/) collection is available in the `bruno/` folder.
