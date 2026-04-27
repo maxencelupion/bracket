@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import prisma from '../config/prisma';
-import { AppError } from '../middlewares/error.middleware';
+import prisma from '../../config/prisma';
+import { AppError } from '../../middlewares/error.middleware';
 
 export const register = async (pseudo: string, email: string, password: string) => {
   const existingEmail = await prisma.user.findUnique({ where: { email } });

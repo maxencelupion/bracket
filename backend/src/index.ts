@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
 import 'dotenv/config';
-import authRouter from './auth/auth.router';
+import authRouter from './modules/auth/auth.router';
 import { errorMiddleware } from './middlewares/error.middleware';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import logger from './config/logger';
