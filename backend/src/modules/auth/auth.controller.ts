@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import * as authService from './auth.service';
-import { RegisterDto, LoginDto } from './auth.dto';
+import type { Request, Response, NextFunction } from 'express';
+import * as authService from './auth.service.js';
+import type { RegisterDto, LoginDto } from './auth.dto.js';
 
 export const registerController = async (
   req: Request<{}, {}, RegisterDto>,

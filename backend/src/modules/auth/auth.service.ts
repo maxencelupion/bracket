@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import prisma from '../../config/prisma';
-import { AppError } from '../../middlewares/error.middleware';
+import prisma from '../../config/prisma.js';
+import { AppError } from '../../middlewares/error.middleware.js';
 
 export const register = async (pseudo: string, email: string, password: string) => {
   const existingEmail = await prisma.user.findUnique({ where: { email } });
@@ -26,9 +26,8 @@ export const register = async (pseudo: string, email: string, password: string) 
 };
 
 export const login = async (password: string, email?: string, pseudo?: string) => {
-  const user = await prisma.user.findUnique({
-    where: email ? { email } : { pseudo },
-  });
+  const where = email ? { email } : { pseudo: pseudo as string };
+  const user = await prisma.user.findUnique({ where });
 
   if (!user) {
     throw new AppError('Invalid credentials', 401, { email, pseudo });

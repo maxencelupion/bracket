@@ -2,10 +2,10 @@ import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
 import 'dotenv/config';
-import authRouter from './modules/auth/auth.router';
-import { errorMiddleware } from './middlewares/error.middleware';
-import { loggerMiddleware } from './middlewares/logger.middleware';
-import logger from './config/logger';
+import authRouter from './modules/auth/auth.router.js';
+import { errorMiddleware } from './middlewares/error.middleware.js';
+import { loggerMiddleware } from './middlewares/logger.middleware.js';
+import logger from './config/logger.js';
 
 const app = express();
 const httpServer = createServer(app);
