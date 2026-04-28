@@ -46,5 +46,39 @@ export const loginDto = z
     }
   });
 
+export const editDto = z
+  .object({
+    email: z.email().optional(),
+    pseudo: z.string().min(3).max(30).optional(),
+    password: z.string().min(1),
+    newPassword: passwordSchema.optional(),
+  })
+  .superRefine(({ email, pseudo, newPassword }, ctx) => {
+    if (!email && !pseudo && !newPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'At least one field must be updated',
+        path: ['email'],
+      });
+    }
+  });
+
+export const profileDto = z
+  .object({
+    email: z.email().optional(),
+    pseudo: z.string().min(3).max(30).optional(),
+  })
+  .superRefine(({ email, pseudo }, ctx) => {
+    if (!email && !pseudo) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'At least one field must be returned',
+        path: ['email'],
+      });
+    }
+  });
+
 export type RegisterDto = z.infer<typeof registerDto>;
 export type LoginDto = z.infer<typeof loginDto>;
+export type EditDto = z.infer<typeof editDto>;
+export type ProfileDto = z.infer<typeof profileDto>;
