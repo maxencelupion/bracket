@@ -1,0 +1,24 @@
+info:
+  name: Create bracket
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://{{baseUrl}}:{{appPort}}/brackets
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My amazing bracket !",
+        "date": "01/01/2027"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3Nzc0MDk4NDYsImV4cCI6MTc3ODAxNDY0Nn0.74wHyin6_heIdCiqUUsFgW0xtMioCj655Hye_RlPtcA
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
