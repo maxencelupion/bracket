@@ -1,0 +1,24 @@
+info:
+  name: Patch profile
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: http://{{baseUrl}}:{{appPort}}/auth/profile
+  body:
+    type: json
+    data: |-
+      {
+        "password": "Password2!",
+        "newPassword": "Password2!"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkY2UzOS02OWRkLTc1N2QtOWFmZC00MGM5OWNiZDNjNjkiLCJpYXQiOjE3NzczOTczNDEsImV4cCI6MTc3ODAwMjE0MX0.NRdLkhQ_B1cH5hsP1JEfbZNfy6Wm1-PJiTt6khr7Nsc
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

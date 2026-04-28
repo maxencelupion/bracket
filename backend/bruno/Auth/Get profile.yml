@@ -1,0 +1,20 @@
+info:
+  name: Get profile
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: http://{{baseUrl}}:{{appPort}}/auth/profile
+  body:
+    type: json
+    data: ""
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkY2UzOS02OWRkLTc1N2QtOWFmZC00MGM5OWNiZDNjNjkiLCJpYXQiOjE3NzczOTczNDEsImV4cCI6MTc3ODAwMjE0MX0.NRdLkhQ_B1cH5hsP1JEfbZNfy6Wm1-PJiTt6khr7Nsc
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
