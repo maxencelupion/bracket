@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Bracket" ALTER COLUMN "name" SET DATA TYPE VARCHAR(100);
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "pseudo" SET DATA TYPE VARCHAR(30);
