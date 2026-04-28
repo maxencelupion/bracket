@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
+import logger from '../config/logger.js';
 
 export class AppError extends Error {
   constructor(
@@ -12,6 +13,8 @@ export class AppError extends Error {
 }
 
 export const errorMiddleware = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  logger.error({ err }, 'Error caught by errorMiddleware');
+
   if (err instanceof AppError) {
     res.status(err.statusCode).json({ message: err.message, provided: err.provided });
     return;
