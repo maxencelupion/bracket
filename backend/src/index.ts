@@ -1,10 +1,11 @@
+import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
-import 'dotenv/config';
 import authRouter from './modules/auth/auth.router.js';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import { loggerMiddleware } from './middlewares/logger.middleware.js';
+import { env } from './config/env.js';
 import logger from './config/logger.js';
 
 const app = express();
@@ -18,7 +19,7 @@ app.use('/auth', authRouter);
 
 app.use(errorMiddleware);
 
-const PORT = process.env.PORT ?? 4000;
+const PORT = env.PORT ?? 4000;
 httpServer.listen(PORT, () => {
   logger.info(`Server running on port http://localhost:${PORT}`);
 });
