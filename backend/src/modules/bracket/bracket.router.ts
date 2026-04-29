@@ -17,5 +17,6 @@ router.patch(
   validate(editDto),
   bracketController.editBracketByIdController
 );
+router.delete('/:id', authMiddleware, bracketController.deleteBracketByIdController);
 
 export default router;

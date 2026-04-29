@@ -62,3 +62,17 @@ export const editBracketByIdController = async (
     next(err);
   }
 };
+
+export const deleteBracketByIdController = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await bracketService.deleteBracketById(req.user!.userId, req.params.id);
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};

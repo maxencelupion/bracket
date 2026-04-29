@@ -3,7 +3,7 @@ import logger from '../../config/logger.js';
 import type { BracketResponseDto } from './bracket.dto.js';
 import type { PaginatedResponse } from '../../types/pagination.js';
 import { AppError } from '../../middlewares/error.middleware.js';
-import bcrypt from 'bcrypt';
+import { BracketState } from '../../../generated/prisma/enums.js';
 
 export const createBracket = async (
   userId: string,
@@ -113,4 +113,33 @@ export const editBracketById = async (
   logger.info(`Bracket with id ${bracketId} edited`);
 
   return bracket;
+};
+
+export const deleteBracketById = async (userId: string, bracketId: string) => {
+  let bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: {
+      id: true,
+      state: true,
+      ownerId: true,
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id: bracketId });
+  }
+
+  if (bracket.ownerId !== userId) {
+    throw new AppError('User is not the owner of this bracket', 404, { id: bracketId });
+  }
+
+  if (bracket.state == BracketState.ONGOING) {
+    throw new AppError(`You can't delete an ongoing bracket`, 404, { id: bracketId });
+  }
+
+  await prisma.bracket.delete({
+    where: { id: bracketId },
+  });
+
+  logger.info(`Bracket with id ${bracketId} deleted`);
 };
