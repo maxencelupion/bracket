@@ -1,0 +1,24 @@
+info:
+  name: Edit bracket by ID
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-b6d4-77e9-932a-77be60a83d52
+  body:
+    type: json
+    data: |-
+      {
+        "name": "my amazing edited bracket name !",
+        "date": "11/27/2030"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3Nzc0OTM4NTYsImV4cCI6MTc3ODA5ODY1Nn0.hDLGZcaCOt6rLOngNuz3rEmwtRULU0qjBbWsyP1kHMY
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
