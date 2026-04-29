@@ -3,6 +3,7 @@ import logger from '../../config/logger.js';
 import type { BracketResponseDto } from './bracket.dto.js';
 import type { PaginatedResponse } from '../../types/pagination.js';
 import { AppError } from '../../middlewares/error.middleware.js';
+import bcrypt from 'bcrypt';
 
 export const createBracket = async (
   userId: string,
@@ -70,6 +71,46 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
   if (!bracket) {
     throw new AppError('Bracket not found', 404, { id });
   }
+
+  logger.info(`Retrieve bracket with id ${id}`);
+
+  return bracket;
+};
+
+export const editBracketById = async (
+  userId: string,
+  bracketId: string,
+  name?: string,
+  date?: Date
+): Promise<BracketResponseDto> => {
+  let bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: {
+      id: true,
+      name: true,
+      date: true,
+      state: true,
+      ownerId: true,
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id: bracketId, name, date });
+  }
+
+  if (bracket.ownerId !== userId) {
+    throw new AppError('User is not the owner of this bracket', 404, { id: bracketId, name, date });
+  }
+
+  bracket = await prisma.bracket.update({
+    where: { id: bracketId },
+    data: {
+      ...(name && { name }),
+      ...(date && { date }),
+    },
+  });
+
+  logger.info(`Bracket with id ${bracketId} edited`);
 
   return bracket;
 };

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import * as bracketService from './bracket.service.js';
-import type { CreateDto } from './bracket.dto.js';
-import { paginationDto, type PaginationDto } from '../../types/pagination.js';
+import type { CreateDto, EditDto } from './bracket.dto.js';
+import type { PaginationDto } from '../../types/pagination.js';
 
 export const createBracketController = async (
   req: Request<{}, {}, CreateDto>,
@@ -36,6 +36,26 @@ export const getBracketByIdController = async (
 ) => {
   try {
     const bracket = await bracketService.getBracketById(req.params.id);
+
+    res.status(200).json(bracket);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const editBracketByIdController = async (
+  req: Request<{ id: string }, {}, EditDto>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name, date } = req.body;
+    const bracket = await bracketService.editBracketById(
+      req.user!.userId,
+      req.params.id,
+      name,
+      date
+    );
 
     res.status(200).json(bracket);
   } catch (err) {
