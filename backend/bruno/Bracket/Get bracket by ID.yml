@@ -1,0 +1,15 @@
+info:
+  name: Get bracket by ID
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-b6d4-77e9-932a-77be60a83d52
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
