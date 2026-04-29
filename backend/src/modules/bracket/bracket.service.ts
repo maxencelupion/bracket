@@ -2,6 +2,7 @@ import prisma from '../../config/prisma.js';
 import logger from '../../config/logger.js';
 import type { BracketResponseDto } from './bracket.dto.js';
 import type { PaginatedResponse } from '../../types/pagination.js';
+import { AppError } from '../../middlewares/error.middleware.js';
 
 export const createBracket = async (
   userId: string,
@@ -52,4 +53,23 @@ export const getBrackets = async (
       limit,
     },
   };
+};
+
+export const getBracketById = async (id: string): Promise<BracketResponseDto> => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      date: true,
+      state: true,
+      ownerId: true,
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id });
+  }
+
+  return bracket;
 };

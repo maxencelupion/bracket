@@ -28,3 +28,17 @@ export const getBracketsController = async (req: Request, res: Response, next: N
     next(err);
   }
 };
+
+export const getBracketByIdController = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const bracket = await bracketService.getBracketById(req.params.id);
+
+    res.status(200).json(bracket);
+  } catch (err) {
+    next(err);
+  }
+};
