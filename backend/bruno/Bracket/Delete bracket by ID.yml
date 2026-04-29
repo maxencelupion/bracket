@@ -1,0 +1,24 @@
+info:
+  name: Delete bracket by ID
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-bac6-700b-af2c-c79070a30c64
+  body:
+    type: json
+    data: |-
+      {
+        "name": "my amazing edited bracket name !",
+        "date": "11/27/2030"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3Nzc0OTM4NTYsImV4cCI6MTc3ODA5ODY1Nn0.hDLGZcaCOt6rLOngNuz3rEmwtRULU0qjBbWsyP1kHMY
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
