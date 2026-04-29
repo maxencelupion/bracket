@@ -39,8 +39,8 @@ export const editController = async (
 ) => {
   try {
     const { email, pseudo, password, newPassword } = req.body;
-
     await authService.editProfile(req.user!.userId, password, email, pseudo, newPassword);
+
     res.status(200).json({ message: 'Profile updated' });
   } catch (err) {
     next(err);
