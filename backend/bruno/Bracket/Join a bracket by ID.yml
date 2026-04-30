@@ -1,0 +1,17 @@
+info:
+  name: Join a bracket by ID
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-b8fa-739e-ae6a-37e9197b3f13/join
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZGQ3YS02NDNmLTcwM2UtYTQ5OC0wMjFlNDVkY2FiNjkiLCJpYXQiOjE3Nzc1MzcyNzksImV4cCI6MTc3ODE0MjA3OX0.trt_m20Gme49AzrDqfDDm4q9XnyL9oMxvWVY1OyVKdA
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
