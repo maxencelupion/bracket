@@ -19,4 +19,7 @@ router.patch(
 );
 router.delete('/:id', authMiddleware, bracketController.deleteBracketByIdController);
 
+// Bracket participants
+router.post('/:id/join', authMiddleware, bracketController.joinBracketByIdController);
+
 export default router;

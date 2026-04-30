@@ -76,3 +76,17 @@ export const deleteBracketByIdController = async (
     next(err);
   }
 };
+
+export const joinBracketByIdController = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await bracketService.joinBracketById(req.user!.userId, req.params.id);
+
+    res.status(201).send();
+  } catch (err) {
+    next(err);
+  }
+};

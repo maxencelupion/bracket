@@ -143,3 +143,45 @@ export const deleteBracketById = async (userId: string, bracketId: string) => {
 
   logger.info(`Bracket with id ${bracketId} deleted`);
 };
+
+export const joinBracketById = async (userId: string, bracketId: string) => {
+  let bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: {
+      id: true,
+      state: true,
+      participants: {
+        select: {
+          id: true,
+          pseudo: true,
+        },
+      },
+      ownerId: true,
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id: bracketId });
+  }
+
+  if (bracket.state !== BracketState.OPENED) {
+    throw new AppError(`You can only join an opened bracket`, 403, { id: bracketId });
+  }
+
+  for (const participant of bracket.participants) {
+    if (userId === participant.id) {
+      throw new AppError('User is already registered in this bracket', 409, { id: bracketId });
+    }
+  }
+
+  await prisma.bracket.update({
+    where: { id: bracketId },
+    data: {
+      participants: {
+        connect: { id: userId },
+      },
+    },
+  });
+
+  logger.info(`User with id ${userId} joined bracket with id ${bracketId}`);
+};
