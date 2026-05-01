@@ -5,7 +5,14 @@ info:
 
 http:
   method: GET
-  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5e3-5671-7218-a8d6-a1ae961448ef/participants
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5e3-5671-7218-a8d6-a1ae961448ef/participants?page=2&limit=2
+  params:
+    - name: page
+      value: "2"
+      type: query
+    - name: limit
+      value: "2"
+      type: query
   auth: inherit
 
 settings:
