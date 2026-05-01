@@ -37,6 +37,12 @@ export const editDto = z
     }
   });
 
+export const participantResponseDto = z.object({
+  id: z.string(),
+  pseudo: z.string(),
+});
+
 export type CreateDto = z.infer<typeof createDto>;
 export type BracketResponseDto = z.infer<typeof bracketResponseDto>;
 export type EditDto = z.infer<typeof editDto>;
+export type ParticipantResponseDto = z.infer<typeof participantResponseDto>;

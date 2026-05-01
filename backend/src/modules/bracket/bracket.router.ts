@@ -21,5 +21,10 @@ router.delete('/:id', authMiddleware, bracketController.deleteBracketByIdControl
 
 // Bracket participants
 router.post('/:id/join', authMiddleware, bracketController.joinBracketByIdController);
+router.get(
+  '/:id/participants',
+  validate(paginationDto, 'query'),
+  bracketController.getParticipantsByIdController
+);
 
 export default router;

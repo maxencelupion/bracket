@@ -1,6 +1,6 @@
 import prisma from '../../config/prisma.js';
 import logger from '../../config/logger.js';
-import type { BracketResponseDto } from './bracket.dto.js';
+import type { BracketResponseDto, ParticipantResponseDto } from './bracket.dto.js';
 import type { PaginatedResponse } from '../../types/pagination.js';
 import { AppError } from '../../middlewares/error.middleware.js';
 import { BracketState } from '../../../generated/prisma/enums.js';
@@ -116,7 +116,7 @@ export const editBracketById = async (
 };
 
 export const deleteBracketById = async (userId: string, bracketId: string) => {
-  let bracket = await prisma.bracket.findUnique({
+  const bracket = await prisma.bracket.findUnique({
     where: { id: bracketId },
     select: {
       id: true,
@@ -145,7 +145,7 @@ export const deleteBracketById = async (userId: string, bracketId: string) => {
 };
 
 export const joinBracketById = async (userId: string, bracketId: string) => {
-  let bracket = await prisma.bracket.findUnique({
+  const bracket = await prisma.bracket.findUnique({
     where: { id: bracketId },
     select: {
       id: true,
@@ -184,4 +184,45 @@ export const joinBracketById = async (userId: string, bracketId: string) => {
   });
 
   logger.info(`User with id ${userId} joined bracket with id ${bracketId}`);
+};
+
+export const getParticipantsById = async (
+  bracketId: string,
+  page: number,
+  limit: number
+): Promise<PaginatedResponse<ParticipantResponseDto>> => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: { id: true },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { bracketId });
+  }
+
+  const skip = (page - 1) * limit;
+
+  const [participants, totalItems] = await prisma.$transaction([
+    prisma.user.findMany({
+      skip,
+      take: limit,
+      select: { id: true, pseudo: true },
+      where: { brackets: { some: { id: bracketId } } },
+    }),
+    prisma.user.count({
+      where: { brackets: { some: { id: bracketId } } },
+    }),
+  ]);
+
+  logger.info(`Retrieved ${participants.length} participant(s) in bracket with id ${bracketId}`);
+
+  return {
+    data: participants,
+    meta: {
+      currentPage: page,
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      limit,
+    },
+  };
 };

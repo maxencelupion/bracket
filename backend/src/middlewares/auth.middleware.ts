@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError } from './error.middleware.js';
 import { env } from '../config/env.js';
-import logger from '../config/logger.js';
 
 export interface JwtPayload {
   userId: string;

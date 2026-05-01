@@ -90,3 +90,18 @@ export const joinBracketByIdController = async (
     next(err);
   }
 };
+
+export const getParticipantsByIdController = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { page, limit } = req.query as unknown as PaginationDto;
+    const result = await bracketService.getParticipantsById(req.params.id, page, limit);
+
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
