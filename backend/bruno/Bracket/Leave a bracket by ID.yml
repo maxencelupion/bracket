@@ -1,0 +1,17 @@
+info:
+  name: Leave a bracket by ID
+  type: http
+  seq: 10
+
+http:
+  method: DELETE
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-b8fa-739e-ae6a-37e9197b3f13/leave
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZGQ3YS02NDNmLTcwM2UtYTQ5OC0wMjFlNDVkY2FiNjkiLCJpYXQiOjE3Nzc3MzA0MTEsImV4cCI6MTc3ODMzNTIxMX0.3mKAixNqf7k2F8XC1ZvAsDkcXOSH4bD3EQu3K77KOBU
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
