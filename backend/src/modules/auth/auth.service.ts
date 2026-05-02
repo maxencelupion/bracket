@@ -25,7 +25,7 @@ export const registerUser = async (pseudo: string, email: string, password: stri
     data: { pseudo, email, password: hashed },
   });
 
-  logger.info(`User with id ${user.id} created`);
+  logger.info(`User ${user.id} created`);
 
   return signToken(user.id);
 };
@@ -44,7 +44,7 @@ export const loginUser = async (password: string, email?: string, pseudo?: strin
     throw new AppError('Invalid credentials', 401, { email, pseudo });
   }
 
-  logger.info(`User with id ${user.id} signed in`);
+  logger.info(`User ${user.id} signed in`);
 
   return signToken(user.id);
 };
@@ -77,7 +77,7 @@ export const editProfile = async (
     },
   });
 
-  logger.info(`User profile with id ${userId} edited`);
+  logger.info(`User profile ${userId} edited`);
 };
 
 export const getProfile = async (userId: string): Promise<ProfileDto> => {
@@ -90,7 +90,7 @@ export const getProfile = async (userId: string): Promise<ProfileDto> => {
     throw new AppError('User not found', 404);
   }
 
-  logger.info(`User profile with id ${userId} retrieved`);
+  logger.info(`User profile ${userId} retrieved`);
 
   return user;
 };

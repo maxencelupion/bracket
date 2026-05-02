@@ -14,7 +14,7 @@ export const createBracket = async (
     data: { name, date, ownerId: userId },
   });
 
-  logger.info(`Bracket with id ${bracket.id} created`);
+  logger.info(`Bracket ${bracket.id} created`);
 
   return bracket;
 };
@@ -71,7 +71,7 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
     throw new AppError('Bracket not found', 404, { id });
   }
 
-  logger.info(`Retrieve bracket with id ${id}`);
+  logger.info(`Retrieved bracket ${id}`);
 
   return bracket;
 };
@@ -109,7 +109,7 @@ export const editBracketById = async (
     },
   });
 
-  logger.info(`Bracket with id ${bracketId} edited`);
+  logger.info(`Bracket ${bracketId} edited`);
 
   return bracket;
 };
@@ -140,7 +140,7 @@ export const deleteBracketById = async (userId: string, bracketId: string) => {
     where: { id: bracketId },
   });
 
-  logger.info(`Bracket with id ${bracketId} deleted`);
+  logger.info(`Bracket ${bracketId} deleted`);
 };
 
 export const joinBracketById = async (userId: string, bracketId: string) => {
@@ -182,7 +182,7 @@ export const joinBracketById = async (userId: string, bracketId: string) => {
     },
   });
 
-  logger.info(`User with id ${userId} joined bracket with id ${bracketId}`);
+  logger.info(`User ${userId} joined bracket ${bracketId}`);
 };
 
 export const getParticipantsById = async (
@@ -213,7 +213,7 @@ export const getParticipantsById = async (
     }),
   ]);
 
-  logger.info(`Retrieved ${participants.length} participant(s) in bracket with id ${bracketId}`);
+  logger.info(`Retrieved ${participants.length} participant(s) in bracket ${bracketId}`);
 
   return {
     data: participants,
