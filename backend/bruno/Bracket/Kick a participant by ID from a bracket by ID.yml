@@ -1,0 +1,17 @@
+info:
+  name: Kick a participant by ID from a bracket by ID
+  type: http
+  seq: 11
+
+http:
+  method: DELETE
+  url: http://{{baseUrl}}:{{appPort}}/brackets/019dd5fe-b8fa-739e-ae6a-37e9197b3f13/participants/019ddd7a-643f-703e-a498-021e45dcab69
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3Nzc3MzA2MzMsImV4cCI6MTc3ODMzNTQzM30.elYFNqaN0A08bWL92cRqzIJpYe4odXFbr8Gi_n-C4rU
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
