@@ -25,7 +25,6 @@ export const getBrackets = async (
 ): Promise<PaginatedResponse<BracketResponseDto>> => {
   // Page is min 1 default 1
   const skip = (page - 1) * limit;
-  console.log(page, limit);
 
   const [brackets, totalItems] = await prisma.$transaction([
     prisma.bracket.findMany({
@@ -130,7 +129,7 @@ export const deleteBracketById = async (userId: string, bracketId: string) => {
   }
 
   if (bracket.ownerId !== userId) {
-    throw new AppError('User is not the owner of this bracket', 404, { id: bracketId });
+    throw new AppError('User is not the owner of this bracket', 403, { id: bracketId });
   }
 
   if (bracket.state == BracketState.ONGOING) {
