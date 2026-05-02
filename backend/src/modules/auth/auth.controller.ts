@@ -3,7 +3,7 @@ import * as authService from './auth.service.js';
 import type { RegisterDto, LoginDto, EditDto } from './auth.dto.js';
 
 export const registerController = async (
-  req: Request<{}, {}, RegisterDto>,
+  req: Request<unknown, unknown, RegisterDto>,
   res: Response,
   next: NextFunction
 ) => {
@@ -18,7 +18,7 @@ export const registerController = async (
 };
 
 export const loginController = async (
-  req: Request<{}, {}, LoginDto>,
+  req: Request<unknown, unknown, LoginDto>,
   res: Response,
   next: NextFunction
 ) => {
@@ -33,7 +33,7 @@ export const loginController = async (
 };
 
 export const editController = async (
-  req: Request<{}, {}, EditDto>,
+  req: Request<unknown, unknown, EditDto>,
   res: Response,
   next: NextFunction
 ) => {

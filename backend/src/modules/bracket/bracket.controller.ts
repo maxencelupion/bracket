@@ -4,7 +4,7 @@ import type { CreateDto, EditDto } from './bracket.dto.js';
 import type { PaginationDto } from '../../types/pagination.js';
 
 export const createBracketController = async (
-  req: Request<{}, {}, CreateDto>,
+  req: Request<unknown, unknown, CreateDto>,
   res: Response,
   next: NextFunction
 ) => {
@@ -44,7 +44,7 @@ export const getBracketByIdController = async (
 };
 
 export const editBracketByIdController = async (
-  req: Request<{ id: string }, {}, EditDto>,
+  req: Request<{ id: string }, unknown, EditDto>,
   res: Response,
   next: NextFunction
 ) => {
