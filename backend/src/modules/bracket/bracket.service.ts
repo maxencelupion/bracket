@@ -249,3 +249,99 @@ export const getParticipantsById = async (
     },
   };
 };
+
+export const leaveBracketById = async (userId: string, bracketId: string) => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: {
+      id: true,
+      state: true,
+      ownerId: true,
+      participants: {
+        where: { id: userId },
+        select: { id: true },
+      },
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id: bracketId });
+  }
+
+  if (bracket.participants.length === 0) {
+    throw new AppError('User is not a participant of this bracket', 404, {
+      id: bracketId,
+      userId,
+    });
+  }
+
+  if (bracket.state !== BracketState.OPENED) {
+    throw new AppError('You can only leave an opened bracket', 403, { id: bracketId });
+  }
+
+  if (bracket.ownerId === userId) {
+    await prisma.bracket.delete({ where: { id: bracketId } });
+    logger.info(`Bracket ${bracketId} deleted because owner left`);
+
+    return;
+  }
+
+  await prisma.bracket.update({
+    where: { id: bracketId },
+    data: { participants: { disconnect: { id: userId } } },
+  });
+
+  logger.info(`User ${userId} left bracket ${bracketId}`);
+};
+
+export const excludeParticipantById = async (
+  ownerId: string,
+  bracketId: string,
+  targetUserId: string
+) => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: {
+      id: true,
+      state: true,
+      ownerId: true,
+      participants: {
+        where: { id: targetUserId },
+        select: { id: true },
+      },
+    },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { id: bracketId });
+  }
+
+  if (bracket.participants.length === 0) {
+    throw new AppError('User is not a participant of this bracket', 404, {
+      id: bracketId,
+      targetUserId,
+    });
+  }
+
+  if (bracket.ownerId !== ownerId) {
+    throw new AppError('Only the owner can exclude participants', 403, { id: bracketId });
+  }
+
+  if (bracket.state !== BracketState.OPENED) {
+    // TODO: Handle state ONGOING and sets every participant's matches statues to lost
+    throw new AppError('You can only exclude from an opened bracket', 403, { id: bracketId });
+  }
+
+  if (ownerId === targetUserId) {
+    throw new AppError('Owner cannot exclude themselves, use leave instead', 400, {
+      id: bracketId,
+    });
+  }
+
+  await prisma.bracket.update({
+    where: { id: bracketId },
+    data: { participants: { disconnect: { id: targetUserId } } },
+  });
+
+  logger.info(`User ${targetUserId} excluded from bracket ${bracketId} by owner ${ownerId}`);
+};

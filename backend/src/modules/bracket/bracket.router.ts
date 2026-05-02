@@ -26,5 +26,10 @@ router.get(
   validate(paginationDto, 'query'),
   bracketController.getParticipantsByIdController
 );
-
+router.delete('/:id/leave', authMiddleware, bracketController.leaveBracketByIdController);
+router.delete(
+  '/:id/participants/:userId',
+  authMiddleware,
+  bracketController.excludeParticipantByIdController
+);
 export default router;

@@ -105,3 +105,31 @@ export const getParticipantsByIdController = async (
     next(err);
   }
 };
+
+export const leaveBracketByIdController = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await bracketService.leaveBracketById(req.user!.userId, req.params.id);
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const excludeParticipantByIdController = async (
+  req: Request<{ id: string; userId: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await bracketService.excludeParticipantById(req.user!.userId, req.params.id, req.params.userId);
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
