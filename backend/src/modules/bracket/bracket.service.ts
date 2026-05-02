@@ -16,7 +16,7 @@ export const createBracket = async (
 
   logger.info(`Bracket ${bracket.id} created`);
 
-  return bracket;
+  return { ...bracket, participantsNumber: 0 };
 };
 
 export const getBrackets = async (
@@ -36,6 +36,9 @@ export const getBrackets = async (
         date: true,
         state: true,
         ownerId: true,
+        _count: {
+          select: { participants: true },
+        },
       },
       orderBy: { createdAt: 'desc' },
     }),
@@ -45,7 +48,11 @@ export const getBrackets = async (
   logger.info(`Retrieve ${limit} bracket(s)`);
 
   return {
-    data: brackets,
+    data: brackets.map((bracket) => ({
+      ...bracket,
+      participantsNumber: bracket._count.participants,
+      _count: undefined,
+    })),
     meta: {
       currentPage: page,
       totalPages: Math.ceil(totalItems / limit),
@@ -64,6 +71,9 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
       date: true,
       state: true,
       ownerId: true,
+      _count: {
+        select: { participants: true },
+      },
     },
   });
 
@@ -73,7 +83,9 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
 
   logger.info(`Retrieved bracket ${id}`);
 
-  return bracket;
+  const { _count, ...rest } = bracket;
+
+  return { ...rest, participantsNumber: _count.participants };
 };
 
 export const editBracketById = async (
@@ -82,7 +94,7 @@ export const editBracketById = async (
   name?: string,
   date?: Date
 ): Promise<BracketResponseDto> => {
-  let bracket = await prisma.bracket.findUnique({
+  const bracket = await prisma.bracket.findUnique({
     where: { id: bracketId },
     select: {
       id: true,
@@ -101,17 +113,29 @@ export const editBracketById = async (
     throw new AppError('User is not the owner of this bracket', 404, { id: bracketId, name, date });
   }
 
-  bracket = await prisma.bracket.update({
+  const updated = await prisma.bracket.update({
     where: { id: bracketId },
     data: {
       ...(name && { name }),
       ...(date && { date }),
     },
+    select: {
+      id: true,
+      name: true,
+      date: true,
+      state: true,
+      ownerId: true,
+      _count: {
+        select: { participants: true },
+      },
+    },
   });
 
   logger.info(`Bracket ${bracketId} edited`);
 
-  return bracket;
+  const { _count, ...rest } = updated;
+
+  return { ...rest, participantsNumber: _count.participants };
 };
 
 export const deleteBracketById = async (userId: string, bracketId: string) => {
