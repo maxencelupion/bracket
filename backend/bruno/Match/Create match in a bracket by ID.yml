@@ -1,0 +1,33 @@
+info:
+  name: Create match in a bracket by ID
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://{{baseUrl}}:{{appPort}}/matches/019dd5fe-b8fa-739e-ae6a-37e9197b3f13/matches
+  body:
+    type: json
+    data: |-
+      {
+        "round": 1,
+        "participants": [
+          {
+            "playerId": "019dd5e1-eb1e-7206-96fa-2500f0a8a087",
+            "side": 1
+          },
+          {
+            "playerId": "5b22d984-35e1-4460-b50f-f506641f17ea",
+            "side": 2
+          }
+        ]
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3NzgyMzIzMjcsImV4cCI6MTc3ODgzNzEyN30.fTN5bhEbEoEGyjFf1NkNbfaakGnW8pRwJ_njcmzFpr4
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
