@@ -34,6 +34,7 @@ model Bracket {
 
 model Match {
   id                String             @id @default(uuid(7))
+  round             Int
   bracket           Bracket            @relation(fields: [bracketId], references: [id])
   bracketId         String
   // We assume that we can have tournamements with many sides playing, including many players per side
