@@ -8,6 +8,7 @@ import { loggerMiddleware } from './middlewares/logger.middleware.js';
 import { env } from './config/env.js';
 import logger from './config/logger.js';
 import bracketRouter from './modules/bracket/bracket.router.js';
+import matchRouter from './modules/match/match.router.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -18,6 +19,7 @@ app.use(loggerMiddleware);
 
 app.use('/auth', authRouter);
 app.use('/brackets', bracketRouter);
+app.use('/matches', matchRouter);
 
 app.use(errorMiddleware);
 
