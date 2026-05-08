@@ -49,12 +49,13 @@ export const editBracketByIdController = async (
   next: NextFunction
 ) => {
   try {
-    const { name, date } = req.body;
+    const { name, date, state } = req.body;
     const bracket = await bracketService.editBracketById(
       req.user!.userId,
       req.params.id,
       name,
-      date
+      date,
+      state
     );
 
     res.status(200).json(bracket);

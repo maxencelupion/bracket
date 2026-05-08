@@ -27,9 +27,10 @@ export const editDto = z
         message: 'Date must be in the future',
       })
       .optional(),
+    state: z.enum(BracketState).optional(),
   })
-  .superRefine(({ name, date }, ctx) => {
-    if (!name && !date) {
+  .superRefine(({ name, date, state }, ctx) => {
+    if (!name && !date && !state) {
       ctx.addIssue({
         code: 'custom',
         message: 'At least one field must be updated',

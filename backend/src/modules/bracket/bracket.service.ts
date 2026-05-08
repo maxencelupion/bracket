@@ -92,7 +92,8 @@ export const editBracketById = async (
   userId: string,
   bracketId: string,
   name?: string,
-  date?: Date
+  date?: Date,
+  state?: BracketState
 ): Promise<BracketResponseDto> => {
   const bracket = await prisma.bracket.findUnique({
     where: { id: bracketId },
@@ -118,6 +119,7 @@ export const editBracketById = async (
     data: {
       ...(name && { name }),
       ...(date && { date }),
+      ...(state && { state }),
     },
     select: {
       id: true,
