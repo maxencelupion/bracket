@@ -37,6 +37,8 @@ model Match {
   round             Int
   bracket           Bracket            @relation(fields: [bracketId], references: [id])
   bracketId         String
+  finished          Boolean            @default(false)
+  winnerId          String?
   // We assume that we can have tournamements with many sides playing, including many players per side
   matchParticipants MatchParticipant[]
   createdAt         DateTime           @default(now()) @map("created_at")
