@@ -16,7 +16,7 @@ export const createBracket = async (
 
   logger.info(`Bracket ${bracket.id} created`);
 
-  return { ...bracket, participantsNumber: 0 };
+  return { ...bracket, participantsNumber: 0, matchsNumber: 0 };
 };
 
 export const getBrackets = async (
@@ -37,7 +37,7 @@ export const getBrackets = async (
         state: true,
         ownerId: true,
         _count: {
-          select: { participants: true },
+          select: { participants: true, matches: true },
         },
       },
       orderBy: { createdAt: 'desc' },
@@ -51,6 +51,7 @@ export const getBrackets = async (
     data: brackets.map((bracket) => ({
       ...bracket,
       participantsNumber: bracket._count.participants,
+      matchsNumber: bracket._count.matches,
       _count: undefined,
     })),
     meta: {
@@ -72,7 +73,7 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
       state: true,
       ownerId: true,
       _count: {
-        select: { participants: true },
+        select: { participants: true, matches: true },
       },
     },
   });
@@ -85,7 +86,7 @@ export const getBracketById = async (id: string): Promise<BracketResponseDto> =>
 
   const { _count, ...rest } = bracket;
 
-  return { ...rest, participantsNumber: _count.participants };
+  return { ...rest, participantsNumber: _count.participants, matchsNumber: _count.matches };
 };
 
 export const editBracketById = async (
@@ -128,7 +129,7 @@ export const editBracketById = async (
       state: true,
       ownerId: true,
       _count: {
-        select: { participants: true },
+        select: { participants: true, matches: true },
       },
     },
   });
@@ -137,7 +138,7 @@ export const editBracketById = async (
 
   const { _count, ...rest } = updated;
 
-  return { ...rest, participantsNumber: _count.participants };
+  return { ...rest, participantsNumber: _count.participants, matchsNumber: _count.matches };
 };
 
 export const deleteBracketById = async (userId: string, bracketId: string) => {

@@ -16,6 +16,7 @@ export const bracketResponseDto = z.object({
   state: z.enum(BracketState),
   ownerId: z.string(),
   participantsNumber: z.number(),
+  matchsNumber: z.number(),
 });
 
 export const editDto = z
