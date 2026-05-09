@@ -1,0 +1,23 @@
+info:
+  name: Edit match by ID from a bracket by ID
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: http://{{baseUrl}}:{{appPort}}/matches/019dd5fe-b8fa-739e-ae6a-37e9197b3f13/matches/019e06f6-7e34-77d7-87cf-37519d9f0c98
+  body:
+    type: json
+    data: |-
+      {
+        "finished": true
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTlkZDVlMS1lYjFlLTcyMDYtOTZmYS0yNTAwZjBhOGEwODciLCJpYXQiOjE3NzgzNDgyNTksImV4cCI6MTc3ODk1MzA1OX0.J2pDg5pHSSm2D6FP5ry4mbo_REmk4wEcPhCk2pIMtzM
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
