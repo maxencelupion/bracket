@@ -83,13 +83,13 @@ export const isMatchParticipantOrOwner = async (
     const isOwner = match.bracket.ownerId === userId;
 
     if (isOwner) {
-      next();
+      return next();
     }
 
     const isParticipant = match.matchParticipants.some((p) => p.playerId === userId);
 
     if (isParticipant) {
-      next();
+      return next();
     }
 
     return next(new AppError('Forbidden', 403));
