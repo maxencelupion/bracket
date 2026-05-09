@@ -46,6 +46,8 @@ export const createMatch = async (
       id: true,
       round: true,
       bracketId: true,
+      finished: true,
+      winnerId: true,
       matchParticipants: {
         select: { id: true, playerId: true, side: true, score: true },
       },
@@ -82,6 +84,8 @@ export const getMatches = async (
         id: true,
         round: true,
         bracketId: true,
+        finished: true,
+        winnerId: true,
         matchParticipants: {
           select: { id: true, playerId: true, side: true, score: true },
         },
@@ -124,6 +128,8 @@ export const getMatchById = async (
       id: true,
       round: true,
       bracketId: true,
+      finished: true,
+      winnerId: true,
       matchParticipants: {
         select: { id: true, playerId: true, side: true, score: true },
       },
@@ -137,4 +143,71 @@ export const getMatchById = async (
   logger.info(`Retrieve match ${matchId} in bracket ${bracketId}`);
 
   return match;
+};
+
+export const editMatchById = async (
+  bracketId: string,
+  matchId: string,
+  round?: number,
+  finished?: boolean,
+  winnerId?: string | null,
+  participants?: { playerId: string; score: number }[]
+): Promise<MatchResponseDto> => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: { state: true },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { bracketId });
+  }
+
+  const match = await prisma.match.findUnique({
+    where: { id: matchId },
+    select: { id: true },
+  });
+
+  if (!match) {
+    throw new AppError('Match not found', 404, { bracketId, matchId });
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.match.update({
+      where: { id: matchId },
+      data: {
+        ...(round !== undefined && { round }),
+        ...(finished !== undefined && { finished }),
+        ...(winnerId !== undefined && { winnerId }),
+      },
+    });
+
+    if (participants) {
+      await Promise.all(
+        participants.map((p) =>
+          tx.matchParticipant.updateMany({
+            where: { matchId, playerId: p.playerId },
+            data: { score: p.score },
+          })
+        )
+      );
+    }
+  });
+
+  const updatedMatch = await prisma.match.findUnique({
+    where: { id: matchId },
+    select: {
+      id: true,
+      round: true,
+      bracketId: true,
+      finished: true,
+      winnerId: true,
+      matchParticipants: {
+        select: { id: true, playerId: true, side: true, score: true },
+      },
+    },
+  });
+
+  logger.info(`Edited match ${matchId} in bracket ${bracketId}`);
+
+  return updatedMatch!;
 };

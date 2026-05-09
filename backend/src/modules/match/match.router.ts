@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { validate } from '../../middlewares/validate.middleware.js';
-import { authMiddleware, isBracketOwner } from '../../middlewares/auth.middleware.js';
-import { createMatchDto } from './match.dto.js';
+import {
+  authMiddleware,
+  isBracketOwner,
+  isMatchParticipantOrOwner,
+} from '../../middlewares/auth.middleware.js';
+import { createMatchDto, editMatchDto } from './match.dto.js';
 import * as matchController from './match.controller.js';
 import { paginationDto } from '../../types/pagination.js';
 
@@ -21,5 +25,12 @@ router.get(
   matchController.getMatchesController
 );
 router.get('/:bracketId/matches/:matchId', matchController.getMatchByIdController);
+router.patch(
+  '/:bracketId/matches/:matchId',
+  authMiddleware,
+  isMatchParticipantOrOwner,
+  validate(editMatchDto),
+  matchController.editMatchByIdController
+);
 
 export default router;
