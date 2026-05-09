@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { BracketState } from '../../../generated/prisma/enums.js';
 
-export const createDto = z.object({
+export const createBracketDto = z.object({
   name: z.string().min(3).max(100),
   // Converts string into date type using coercion
   date: z.coerce.date().refine((date) => date >= new Date(), {
@@ -19,7 +19,7 @@ export const bracketResponseDto = z.object({
   matchsNumber: z.number(),
 });
 
-export const editDto = z
+export const editBracketDto = z
   .object({
     name: z.string().min(3).max(100).optional(),
     date: z.coerce
@@ -45,7 +45,7 @@ export const participantResponseDto = z.object({
   pseudo: z.string(),
 });
 
-export type CreateDto = z.infer<typeof createDto>;
+export type CreateBracketDto = z.infer<typeof createBracketDto>;
 export type BracketResponseDto = z.infer<typeof bracketResponseDto>;
-export type EditDto = z.infer<typeof editDto>;
+export type EditBracketDto = z.infer<typeof editBracketDto>;
 export type ParticipantResponseDto = z.infer<typeof participantResponseDto>;

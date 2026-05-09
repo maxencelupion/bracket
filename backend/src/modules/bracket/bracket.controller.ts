@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from 'express';
 import * as bracketService from './bracket.service.js';
-import type { CreateDto, EditDto } from './bracket.dto.js';
+import type { CreateBracketDto, EditBracketDto } from './bracket.dto.js';
 import type { PaginationDto } from '../../types/pagination.js';
 
 export const createBracketController = async (
-  req: Request<unknown, unknown, CreateDto>,
+  req: Request<unknown, unknown, CreateBracketDto>,
   res: Response,
   next: NextFunction
 ) => {
@@ -44,7 +44,7 @@ export const getBracketByIdController = async (
 };
 
 export const editBracketByIdController = async (
-  req: Request<{ id: string }, unknown, EditDto>,
+  req: Request<{ id: string }, unknown, EditBracketDto>,
   res: Response,
   next: NextFunction
 ) => {
