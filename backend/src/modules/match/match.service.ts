@@ -3,6 +3,7 @@ import logger from '../../config/logger.js';
 import type { MatchResponseDto } from './match.dto.js';
 import { AppError } from '../../middlewares/error.middleware.js';
 import { BracketState } from '../../../generated/prisma/enums.js';
+import type { PaginatedResponse } from '../../types/pagination.js';
 
 export const createMatch = async (
   bracketId: string,
@@ -52,6 +53,88 @@ export const createMatch = async (
   });
 
   logger.info(`Match ${match.id} created in bracket ${bracketId}`);
+
+  return match;
+};
+
+export const getMatches = async (
+  bracketId: string,
+  page: number,
+  limit: number
+): Promise<PaginatedResponse<MatchResponseDto>> => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: { state: true, participants: { select: { id: true } } },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { bracketId });
+  }
+
+  // Page is min 1 default 1
+  const skip = (page - 1) * limit;
+
+  const [matches, totalItems] = await prisma.$transaction([
+    prisma.match.findMany({
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        round: true,
+        bracketId: true,
+        matchParticipants: {
+          select: { id: true, playerId: true, side: true, score: true },
+        },
+      },
+      where: { bracketId },
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.bracket.count(),
+  ]);
+
+  logger.info(`Retrieve ${limit} match(es)`);
+
+  return {
+    data: matches,
+    meta: {
+      currentPage: page,
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      limit,
+    },
+  };
+};
+
+export const getMatchById = async (
+  bracketId: string,
+  matchId: string
+): Promise<MatchResponseDto> => {
+  const bracket = await prisma.bracket.findUnique({
+    where: { id: bracketId },
+    select: { state: true, participants: { select: { id: true } } },
+  });
+
+  if (!bracket) {
+    throw new AppError('Bracket not found', 404, { bracketId });
+  }
+
+  const match = await prisma.match.findUnique({
+    where: { id: matchId },
+    select: {
+      id: true,
+      round: true,
+      bracketId: true,
+      matchParticipants: {
+        select: { id: true, playerId: true, side: true, score: true },
+      },
+    },
+  });
+
+  if (!match) {
+    throw new AppError('Match not found', 404, { bracketId, matchId });
+  }
+
+  logger.info(`Retrieve match ${matchId} in bracket ${bracketId}`);
 
   return match;
 };
